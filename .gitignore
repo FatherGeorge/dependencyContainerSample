@@ -1,4 +1,10 @@
+# gradle
 .gradle
 .idea
 build
-gradle
+
+# IntelliJ
+*.ipr
+*.iml
+*.iws
+.idea/
