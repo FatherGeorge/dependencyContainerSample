@@ -16,15 +16,16 @@ public class SimpleDiContainerTest {
 
     @Test
     public void injectsOneDependency() {
-
+        // Setup
         InMemoryDriver driverImpl = new InMemoryDriver();
         SimpleDiContainer container = new SimpleDiContainer(driverImpl);
 
-        Orm ormBean = container.getBean(Orm.class);
-
-        ormBean.save("String");
+        // Exercise
+        Orm ormBean = container.getBean(Orm.class); // getBean() should create an instance of Orm *and* set the driver
+        ormBean.save("String"); // save() should complete successfully if the driver field has been set
         ormBean.save(new int[] { 1, 2, 3 });
 
+        // Assert
         assertThat(driverImpl.saved, hasItem("String"));
         assertThat(driverImpl.saved, hasItem(new int[] { 1, 2, 3 }));
     }
@@ -32,14 +33,16 @@ public class SimpleDiContainerTest {
     @Test
     public void injectsMultipleDependencies() {
 
+        // Setup
         RoomValidator validator = new RoomValidator();
         RoomRepository repository = new RoomRepository();
         SimpleDiContainer container = new SimpleDiContainer(validator, repository);
 
+        // Exercise
         RoomController controllerBean = container.getBean(RoomController.class);
-
         controllerBean.createRoom(new Room("Classroom", 30));
 
+        // Assert
         assertThat(validator.called, is(true));
         assertThat(repository.called, is(true));
     }
